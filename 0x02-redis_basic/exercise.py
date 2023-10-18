@@ -25,7 +25,7 @@ class Cache:
         return key
 
     def get(self, key: str, fn: Callable[[str], Union[str, int, float,
-    bytes]] = None) -> Union[str, int, float, bytes, None]:
+    bytes]] = None) -> Union[str, int, float, bytes]:
         """
         Gets the value of a key
         :param key: string key
@@ -37,8 +37,4 @@ class Cache:
         if fn is None:
             return self._redis.get(key)
         else:
-            val = self._redis.get(key)
-            if val is None:
-                return None
-
-            return fn(val)
+            return fn(self._redis.get(key))
