@@ -24,8 +24,7 @@ class Cache:
 
         return key
 
-    def get(self, key: str, fn: Callable[[str], Union[str, int, float,
-    bytes]] = None) -> Union[str, int, float, bytes]:
+    def get(self, key: str, fn: Callable = None):
         """
         Gets the value of a key
         :param key: string key
