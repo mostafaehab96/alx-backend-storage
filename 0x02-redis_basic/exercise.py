@@ -2,7 +2,7 @@
 """Create a Cache class"""
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable
 
 
 class Cache:
@@ -23,3 +23,22 @@ class Cache:
         self._redis.set(key, data)
 
         return key
+
+    def get(self, key: str, fn: Callable[[str], Union[str, int, float,
+    bytes]] = None) -> Union[str, int, float, bytes, None]:
+        """
+        Gets the value of a key
+        :param key: string key
+        :param fn: callable function used to convert the value to it's
+        original format
+        :return: the original value
+        """
+
+        if fn is None:
+            return self._redis.get(key)
+        else:
+            val = self._redis.get(key)
+            if val is None:
+                return None
+
+            return fn(val)
