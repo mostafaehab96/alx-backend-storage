@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 """Create a Cache class"""
 import redis
+from functools import wraps
 import uuid
 from typing import Union, Callable, Optional
+
+
+def count_calls(method: Callable) -> Callable:
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        self._redis.incr(method.__qualname__)
+        return method(self, *args, **kwargs)
+
+    return wrapper
 
 
 class Cache:
@@ -13,6 +23,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, float, int, bytes]) -> str:
         """
         Store a data with a random key
@@ -25,7 +36,7 @@ class Cache:
         return key
 
     def get(self, key: str, fn: Optional[Callable] = None) -> Union[
-            str, bytes, int, float]:
+        str, bytes, int, float]:
         """
         Gets the value of a key
         :param key: string key
