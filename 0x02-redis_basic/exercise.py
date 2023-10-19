@@ -2,13 +2,13 @@
 """Create a Cache class"""
 import redis
 import uuid
-from typing import Union, Callable
+from typing import Union, Callable, Optional
 
 
 class Cache:
     """Stores a cache data."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the redis database"""
         self._redis = redis.Redis()
         self._redis.flushdb()
@@ -24,11 +24,12 @@ class Cache:
 
         return key
 
-    def get(self, key: str, fn: Callable = None):
+    def get(self, key: str, fn: Optional[Callable] = None) -> Union[
+            str, bytes, int, float]:
         """
         Gets the value of a key
         :param key: string key
-        :param fn: callable function used to convert the value to it's
+        :param fn: callable function used to convert the value to its
         original format
         :return: the original value
         """
