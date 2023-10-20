@@ -1,2 +1,2 @@
 // First commit
-db.school.countDocuments()
+db.school.count()
