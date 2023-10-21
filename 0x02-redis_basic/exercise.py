@@ -24,7 +24,7 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
-    def store(self, data: Union[str, float, int, bytes]) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Store a data with a random key
         :param data: data to be stored
@@ -49,3 +49,11 @@ class Cache:
             return self._redis.get(key)
         else:
             return fn(self._redis.get(key))
+
+    def get_int(self, data: bytes) -> int:
+        """Convert data to int"""
+        return int(data)
+
+    def get_str(self, data: bytes) -> str:
+        """Convert data to str"""
+        return data.decode('utf-8')
