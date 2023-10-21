@@ -28,7 +28,7 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
-def replay(method: Callable):
+def replay(method: Callable) -> None:
     """display the history of calls of a particular function."""
     my_redis = redis.Redis()
     inputs = my_redis.lrange(method.__qualname__ + ":inputs", 0, -1)
