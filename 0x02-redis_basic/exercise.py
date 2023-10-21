@@ -7,8 +7,11 @@ from typing import Union, Callable, Optional
 
 
 def count_calls(method: Callable) -> Callable:
+    """A decorator to count how many times a method was called"""
+
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """The wrapper function that store the count"""
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
 
