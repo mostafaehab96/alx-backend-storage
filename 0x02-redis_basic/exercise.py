@@ -28,6 +28,18 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
+def replay(method: Callable):
+    """display the history of calls of a particular function."""
+    my_redis = redis.Redis()
+    inputs = my_redis.lrange(method.__qualname__ + ":inputs", 0, -1)
+    outputs = my_redis.lrange(method.__qualname__ + ":outputs", 0, -1)
+    inp_out = zip(inputs, outputs)
+    print(f"{method.__qualname__} was called {len(inputs)} times:")
+    for inp, out in inp_out:
+        print(f"{method.__qualname__}(*{inp.decode('utf-8')}) -> "
+              f"{out.decode('utf-8')}")
+
+
 class Cache:
     """Stores a cache data."""
 
